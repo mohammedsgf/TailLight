@@ -1,12 +1,12 @@
 module TailLight_test;
 
 reg LEFT,RIGHT,HAZ;
-reg reset;
+
 wire LC,LB,LA,RA,RB,RC;
 
 reg clk;
 
-TailLight UUT(clk,~reset,LEFT,RIGHT,HAZ,LC,LB,LA,RA,RB,RC);
+TailLight UUT(clk,LEFT,RIGHT,HAZ,LC,LB,LA,RA,RB,RC);
 
 
 
@@ -20,7 +20,6 @@ begin
 end
 
 initial begin
-reset=1;
 HAZ=0;
 
 
