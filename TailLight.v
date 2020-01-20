@@ -1,44 +1,64 @@
 module TailLight(
 input Clk_2Hz,
-input reset,
 input LEFT,RIGHT,HAZ,
 output LC,LB,LA,RA,RB,RC
 );
 
-reg [8:0] LED= 9'b000111000;
+reg [5:0] LEDR= 6'b111000;
+reg [5:0] LEDL= 6'b000111;
+reg isHAZ=0;
 
-assign {LC,LB,LA}=LED[8:6];
-assign {RA,RB,RC}=LED[2:0];
+assign {LC,LB,LA}=LEDL[5:3];
+assign {RA,RB,RC}=LEDR[2:0];
 
 
-always @(posedge Clk_2Hz, posedge reset)
+always @(posedge Clk_2Hz)
 begin
 
-	if(reset)
-		LED<=9'b000111000;
-	else
-		begin//begin else
-			if(HAZ)
-				if(LED==9'b111111111)
-					LED<=9'b000111000;
-				else
-					LED<=9'b111111111;
+	if(HAZ)
+		begin//begin HAZ
+			if(LEDL[5:3]&LEDR[2:0])
+				begin
+					LEDR <=6'b111000;
+					LEDL <=6'b000111;
+				end
 			else
-				begin//haz else begin
-				if(LEFT)
-					if(LC&LB&LA)
-						LED<=9'b000111000;
-					else
-						LED<=LED<<1;
-				else if(RIGHT)
-					if(RA&RB&RC)
-							LED<=9'b000111000;
-						else
-							LED<=LED>>1;
-							
-				end//haz else end
+				begin
+					isHAZ <= 1;
+					LEDR <= 6'b000111;
+					LEDL <= 6'b111000;
+				end
+		end//end HAZ
+	else
+		if(LEFT)
+			begin//begin LEFT
+				LEDR <= 6'b111000;
+				if(LC & LB & LA)
+					LEDL <= 6'b000111;
+				else
+					LEDL <= LEDL << 1;
+			end//end LEFT	
+		else if(RIGHT)
+			begin//begin RIGHT
+				LEDL <= 6'b000111;
+				if(RA & RB & RC)
+					LEDR <= 6'b111000;
+				else
+					LEDR <= LEDR >> 1;
+			end//end RIGHT	
+			
+		//-------------------------------------------------	
 				
-		end//end else
+			if(isHAZ) //HAZ OFF statment
+				begin
+				LEDL<=6'b000111;
+				LEDR<=6'b111000;
+				isHAZ<=0;
+				end
+			if(~RIGHT&~HAZ)//RIGHT OFF statment
+				LEDR<=6'b111000;
+			if(~LEFT&~HAZ)//LEFT OFF statment
+				LEDL<=6'b000111;
 
 end
 
