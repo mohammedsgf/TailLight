@@ -17,20 +17,14 @@ begin
 
 	if(HAZ)
 		begin//begin HAZ
-			if(LEDL[5:3]&LEDR[2:0])
-				begin
-					LEDR <=6'b111000;
-					LEDL <=6'b000111;
-				end
-			else
-				begin
-					isHAZ <= 1;
-					LEDR <= 6'b000111;
-					LEDL <= 6'b111000;
-				end
+			
+			isHAZ <= 1;
+			LEDR <= 6'b000111;
+			LEDL <= 6'b111000;
+				
 		end//end HAZ
 	else
-		if(LEFT)
+		if(LEFT & ~RIGHT)
 			begin//begin LEFT
 				LEDR <= 6'b111000;
 				if(LC & LB & LA)
@@ -38,7 +32,7 @@ begin
 				else
 					LEDL <= LEDL << 1;
 			end//end LEFT	
-		else if(RIGHT)
+		else if(RIGHT & ~LEFT)
 			begin//begin RIGHT
 				LEDL <= 6'b000111;
 				if(RA & RB & RC)
@@ -50,14 +44,14 @@ begin
 		//-------------------------------------------------	
 				
 			if(isHAZ) //HAZ OFF statment
-				begin
+				begin	//THis statment will force the LEDs to be off in the next cycle because of the non blocking assignmnet which cause the flashing state
 				LEDL<=6'b000111;
 				LEDR<=6'b111000;
 				isHAZ<=0;
 				end
-			if(~RIGHT&~HAZ)//RIGHT OFF statment
+			if(~RIGHT&~HAZ | RIGHT&LEFT)//RIGHT OFF statment
 				LEDR<=6'b111000;
-			if(~LEFT&~HAZ)//LEFT OFF statment
+			if(~LEFT&~HAZ | RIGHT&LEFT)//LEFT OFF statment
 				LEDL<=6'b000111;
 
 end
