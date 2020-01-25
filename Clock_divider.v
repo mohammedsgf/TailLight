@@ -5,7 +5,7 @@ module Clock_divider(
 );
 	
 	parameter IN_CLOCK  = 50000000; // 50 MHz
-	parameter OUT_CLOCK = 2; 		// 2 Hz; to have 0.5s pulses
+	parameter OUT_CLOCK = 4; 		// 4 Hz; to have 0.25s pulses
 
 	parameter COUNT_MAX   = (IN_CLOCK / OUT_CLOCK)/2;  // Half period
 	parameter CLOCK_WIDTH = $clog2(IN_CLOCK / OUT_CLOCK); 
