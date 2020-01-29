@@ -59,18 +59,6 @@ begin
 			isHAZ<=0;
 			end
 			
-		//-------------------------------------------------	
-				
-			/*if(isHAZ) //HAZ OFF statment whenever HAZ is 0
-				begin	//THis statment will force the LEDs to be off in the next cycle because of the non blocking assignmnet which cause the flashing state
-				LEDL<=6'b000111;
-				LEDR<=6'b111000;
-				isHAZ<=0;
-				end
-			if(~RIGHT&~HAZ | RIGHT&LEFT)//RIGHT OFF statment whenever RIGHT is 0
-				LEDR<=6'b111000;
-			if(~LEFT&~HAZ | RIGHT&LEFT)//LEFT OFF statment whenever LEFT is 0
-				LEDL<=6'b000111;*/
 
 end
 
